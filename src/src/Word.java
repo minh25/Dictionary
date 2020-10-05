@@ -1,6 +1,6 @@
 
 public class Word {
-    private String content, meaning;
+    private String word_target, word_explain;
     static public String[] Split(String input) {
         int count =0;
         String[] result=new String[2];
@@ -8,39 +8,39 @@ public class Word {
 
     }
     public Word() {}
-    public Word(String Content, String Meaning) {
-        content = Content;
-        meaning = Meaning;
+    public Word(String word_target, String word_explain) {
+        word_target = word_target;
+        word_explain = word_explain;
     }
     public Word(String raw) {
-        content = raw;
+        word_target = raw;
     }
-    public void setMeaning(String Meaning) {
-        this.meaning=Meaning;
+    public void setWord_explain(String word_explain) {
+        this.word_explain=word_explain;
     }
-    public void setContent(String Content) {
-        this.content=Content;
+    public void setWord_target(String word_target) {
+        this.word_target=word_target;
     }
-    public String getMeaning() {
-        if(this.meaning==null) {
+    public String getWord_explain() {
+        if(this.word_explain==null) {
             return new String("empty!");
         }
-        return this.meaning;
+        return this.word_explain;
     }
-    public String getContent() {
-        if(this.content==null) {
+    public String getWord_target() {
+        if(this.word_target==null) {
             return new String("empty!");
         }
-        return this.content;
+        return this.word_target;
     }
     public boolean equals(Object another){
         String temp;
         if(another instanceof String) {
             temp=(String) another;
         } else if(another instanceof Word) {
-            temp=((Word) another).content;
+            temp=((Word) another).word_target;
         } else return false;
-        return (this.content==temp);
+        return (this.word_target.equals(temp));
     }
 }
 
