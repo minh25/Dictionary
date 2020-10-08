@@ -1,46 +1,89 @@
-
+import java.util.Objects;
+import java.util.Scanner;
+import org.json.simple.JSONObject;
 public class Word {
-    private String content, meaning;
-    static public String[] Split(String input) {
-        int count =0;
-        String[] result=new String[2];
-        return result;
+  String _target, _content;
 
+  public Word(String _target) {
+    this._target = _target;
+  }
+  public Word(JSONObject o){
+    this._target=(String)o.get("word");
+    this._content=(String)o.get("detail");
+  }
+
+  public static void main(String[] args) {
+    Scanner in = new Scanner(System.in);
+    String word = in.next();
+
+    Word W = new Word(word);
+    for (int i = 0; i < 10; i++) {
+      String key = in.next();
+      System.out.println(W.comareTo(key));
     }
-    public Word() {}
-    public Word(String Content, String Meaning) {
-        content = Content;
-        meaning = Meaning;
-    }
-    public Word(String raw) {
-        content = raw;
-    }
-    public void setMeaning(String Meaning) {
-        this.meaning=Meaning;
-    }
-    public void setContent(String Content) {
-        this.content=Content;
-    }
-    public String getMeaning() {
-        if(this.meaning==null) {
-            return new String("empty!");
+    in.close();
+  }
+
+  public int comareTo(String key) {
+    return this._target.compareTo(key);
+  }
+
+  public String get_target() {
+    return _target;
+  }
+
+  public void set_target(String _target) {
+    this._target = _target;
+  }
+
+  public String get_content() {
+    return _content;
+  }
+
+  public void set_content(String _content) {
+    this._content = _content;
+  }
+
+  public float Match(String key) {
+    float result = 0, len = (float) key.length(), bI = -1, weight = 1;
+    for (int i = 0; i < key.length(); i++) {
+      int I = this._target.indexOf(key.charAt(i), (int) bI + 1);
+      if (I != -1) {
+        if (I == bI + 1) {
+          result += 1 / len * weight;
+        } else {
+          weight /= 2;
+          result += 1 / len * weight;
         }
-        return this.meaning;
+      }
+      bI = I;
     }
-    public String getContent() {
-        if(this.content==null) {
-            return new String("empty!");
-        }
-        return this.content;
+
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Word{" +
+            "_target='" + _target + '\'' +
+            ", _content='" + _content + '\'' +
+            '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o instanceof String){
+      return this._target.equals(o);
     }
-    public boolean equals(Object another){
-        String temp;
-        if(another instanceof String) {
-            temp=(String) another;
-        } else if(another instanceof Word) {
-            temp=((Word) another).content;
-        } else return false;
-        return (this.content==temp);
-    }
+    if (!(o instanceof Word)) return false;
+    Word word = (Word) o;
+    return Objects.equals(get_target(), word.get_target())
+        && Objects.equals(get_content(), word.get_content());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(get_target(), get_content());
+  }
 }
-
