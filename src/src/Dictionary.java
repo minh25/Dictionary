@@ -7,6 +7,9 @@ public class Dictionary {
   private int MAX_SIZE = 1000;
   private int size = 0;
   private Word[] list = new Word[MAX_SIZE];
+  public boolean delete(String key){
+    return false;
+  }
 
   public Dictionary(Word[] list) {
     this.list = list;
@@ -74,6 +77,10 @@ public class Dictionary {
       size += 1;
       return true;
     }
+    return false;
+  }
+
+  public boolean push(String _target, String _content){
     return false;
   }
 
