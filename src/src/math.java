@@ -38,7 +38,7 @@ public class math {
     }
     public static Dictionary LoadJson() throws IOException, ParseException {
         Dictionary result = new Dictionary();
-        String path = "data\\ENVN_0.json";
+        String path = "data\\ENVN.json";
         JSONParser parser= new JSONParser();
         JSONArray obj = (JSONArray) parser.parse(new FileReader(path));
         int Z=0;
