@@ -1,6 +1,4 @@
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.Objects;
@@ -9,17 +7,9 @@ import java.util.Scanner;
 public class Word implements Comparable<Word> {
 
   String _target, _content;
-  Word left, right;
 
   public Word(String _target) {
     this._target = _target;
-  }
-
-  public Word(String _target, String _content, Word left, Word right) {
-    this._target = _target;
-    this._content = _content;
-    this.left = left;
-    this.right = right;
   }
 
   public Word(String _target, String _content) {
@@ -44,26 +34,6 @@ public class Word implements Comparable<Word> {
     in.close();
   }
 
-  public boolean isLeaf() {
-    return (left == null && right == null);
-  }
-
-  public Word getLeft() {
-    return left;
-  }
-
-  public void setLeft(Word left) {
-    this.left = left;
-  }
-
-  public Word getRight() {
-    return right;
-  }
-
-  public void setRight(Word right) {
-    this.right = right;
-  }
-
   public int comareTo(String key) {
     return this._target.toLowerCase().compareTo(key.toLowerCase());
   }
@@ -80,16 +50,28 @@ public class Word implements Comparable<Word> {
     return _content;
   }
 
-  public void set_content(String type, String pronunciation,String note, String meaning) {
-    this._content = "<C><F><I><N><Q>@"+_target+" /"+pronunciation+"<br />*  "+type+"/<br />- ("+note+") "+meaning+"</Q></N></I></F></C>";
+  public void set_content(String _content) {
+    this._content = _content;
   }
-  public void set_content(String _content){
-    this._content=_content;
+
+  public void set_content(String type, String pronunciation, String note, String meaning) {
+    this._content =
+        "<C><F><I><N><Q>@"
+            + _target
+            + " /"
+            + pronunciation
+            + "<br />*  "
+            + type
+            + "/<br />- ("
+            + note
+            + ") "
+            + meaning
+            + "</Q></N></I></F></C>";
   }
 
   public float Match(String key) {
     String _t = _target.toLowerCase();
-    key= key.toLowerCase();
+    key = key.toLowerCase();
     float result = 0, len = (float) key.length(), bI = -1, weight = 1;
     for (int i = 0; i < key.length(); i++) {
       int I = _t.indexOf(key.charAt(i), (int) bI + 1);
@@ -114,9 +96,8 @@ public class Word implements Comparable<Word> {
 
   public JSONObject toJson() throws ParseException {
     JSONObject result = new JSONObject();
-    result.put("word",this._target);
-    result.put("detail",this._content);
-    //  System.out.println(result);
+    result.put("word", this._target);
+    result.put("detail", this._content);
     return result;
   }
 
@@ -129,7 +110,7 @@ public class Word implements Comparable<Word> {
     if (!(o instanceof Word)) return false;
     Word word = (Word) o;
     return Objects.equals(get_target().toLowerCase(), word.get_target().toLowerCase())
-            && Objects.equals(get_content().toLowerCase(), word.get_content().toLowerCase());
+        && Objects.equals(get_content().toLowerCase(), word.get_content().toLowerCase());
   }
 
   @Override

@@ -6,22 +6,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
 
 
 
 public class math {
     public static final float acceptable =(float) 1;
-    static public int IndexOfMax(float[] in){
 
-        float[] temp=new float[in.length];
-        temp=in.clone();
-        Arrays.sort(temp);
-        float value= temp[temp.length-1];
-        return Arrays.binarySearch(temp,value);
-
-    }
     public static void save(JSONArray t) throws IOException {
         File myObj = new File("data\\ENVN.json");
         if (myObj.createNewFile()) {
@@ -41,14 +31,9 @@ public class math {
         String path = "data\\ENVN.json";
         JSONParser parser= new JSONParser();
         JSONArray obj = (JSONArray) parser.parse(new FileReader(path));
-        int Z=0;
-        Iterator<JSONObject> iter = obj.iterator();
         for (Object o : obj){
             JSONObject temp = (JSONObject)o;
-            if(o instanceof JSONObject){
-                Z++;
-
-                //System.out.println(iter);
+            if(o != null){
                 Word i = new Word(temp);
                 result.push(i);
             }
@@ -90,25 +75,6 @@ public class math {
         return result;
     }
 
-    public int valid_pos_insert(Dictionary dic, String key){
 
-        if(dic.getSize()==0 || dic.get(0).comareTo(key)<0){
-            return -1;
-        } else {
-            if(dic.get(dic.getSize()-1).comareTo(key)>0){
-                return dic.getSize();
-            }
-            else{
-                return -1;
-            }
-        }
-    }
-
-
-
-    public static void  main( String[] args) throws IOException, ParseException {
-
-
-    }
 
 }
