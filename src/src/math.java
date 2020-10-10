@@ -1,12 +1,13 @@
-//import jdk.nashorn.internal.parser.JSONParser;
-//import org.graalvm.compiler.word.WordCastNode;
+
 import org.json.simple.*;
 import org.json.simple.parser.*;
-
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
+
+
 
 public class math {
     public static final float acceptable =(float) 1;
@@ -19,32 +20,72 @@ public class math {
         return Arrays.binarySearch(temp,value);
 
     }
-   public static Dictionary LoadJson() throws IOException, ParseException {
+    public static void save(JSONArray t) throws IOException {
+        String path = "C:\\Users\\Nguyen Minh Quang\\Desktop\\OOP\\BT_1\\ENVN_0.json";
+        FileWriter f = new FileWriter(path);
+        t.writeJSONString(f);
+        f.flush();
+        f.close();
+    }
+    public static Dictionary LoadJson() throws IOException, ParseException {
         Dictionary result = new Dictionary();
-        String path = "BT\\ENVN.json";
-        JSONArray obj = (JSONArray) new JSONParser().parse(new FileReader(path));
-
+        String path = "C:\\Users\\Nguyen Minh Quang\\Desktop\\OOP\\BT_1\\ENVN.json";
+        JSONParser parser= new JSONParser();
+        JSONArray obj = (JSONArray) parser.parse(new FileReader(path));
+        int Z=0;
         Iterator<JSONObject> iter = obj.iterator();
-        while(iter.hasNext()){
-            Word i = new Word(iter.next());
-            result.add(i);
-        //    System.out.println(i.toString());
+        for (Object o : obj){
+            JSONObject temp = (JSONObject)o;
+            if(o instanceof JSONObject){
+                Z++;
+
+                //System.out.println(iter);
+                Word i = new Word(temp);
+                result.push(i);
+            }
         }
+        result.sort();
         return result;
 
     }
+    public static int binarySearch(Dictionary dic, int l, int r, String x)
+    {
+
+        if (r >= l) {
+            int mid = l + (r - l) / 2;
+
+            if (dic.get(mid).equals(x))
+                return mid;
+
+            if (dic.get(mid).comareTo(x)>0)
+                return binarySearch(dic, l, mid - 1, x);
+
+            return binarySearch(dic, mid + 1, r, x);
+        }
+
+        return -1;
+    }
+
     public static Dictionary FindIn(String key, Dictionary dic){
         Dictionary result = new Dictionary();
-        for (int i = 0; i<dic.getSize();i++ ){
+        int pos = binarySearch(dic,0,dic.getSize()-1,key);
+        if(pos ==-1) {
+            pos=0;
+            System.out.println("binary search is not active");
+        }
+        for (int i = pos; i<dic.getSize();i++ ){
             if(dic.get(i).Match(key)>=acceptable){
-                result.add(dic.get(i));
+                result.push(dic.get(i));
             }
         }
         return result;
     }
 
+
+
     public static void  main( String[] args) throws IOException, ParseException {
-        System.out.println(math.LoadJson());
+
+
     }
 
 }

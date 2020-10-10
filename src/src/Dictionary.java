@@ -1,15 +1,14 @@
+import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Dictionary {
-  private int MAX_SIZE = 1000;
+  private int MAX_SIZE = 200000;
   private int size = 0;
   private Word[] list = new Word[MAX_SIZE];
-  public boolean delete(String key){
-    return false;
-  }
 
   public Dictionary(Word[] list) {
     this.list = list;
@@ -17,14 +16,27 @@ public class Dictionary {
 
   public Dictionary() {}
 
+
+
+
   public static void main(String[] args) throws IOException, ParseException {
     Dictionary x;
     x = math.LoadJson();
+    System.out.println(x.getSize());
     Scanner in = new Scanner(System.in);
     while (true) {
       String key = in.next();
-      x.Find(key).print();
-    }
+      if(key.toLowerCase().equals("add")){
+        String t = in.next();
+        String content = in.nextLine();
+        Word X=new Word(t,content);
+        System.out.println(X);
+        System.out.println(math.binarySearch(x,0,x.getSize()-1,X.get_target()));
+        x.add(X);
+        x.save();
+      } else{
+        x.Find(key).print();
+      }}
   }
 
   public Word get(final int index) {
@@ -38,6 +50,9 @@ public class Dictionary {
   public boolean isEmpty() {
     return this.size == 0;
   }
+  public void sort(){
+    Arrays.sort(list,0,size-1);
+  }
 
   private void Expand() {
     this.MAX_SIZE *= 2;
@@ -46,29 +61,14 @@ public class Dictionary {
     System.arraycopy(x, 0, this.list, 0, x.length);
   }
 
-  public Word[] Find(String key, float acceptable) {
-    int first = 0, last = size;
-    Word[] result = new Word[10];
-    int index = Arrays.binarySearch(this.list, key);
-    if (index >= 0) {
-      System.arraycopy(this.list, index, result, 0, 10);
-    } else {
-      float[] value = new float[size];
-      for (int i = 0; i < value.length; i++) {
-        value[i] = this.list[i].Match(key);
-      }
-      int inD = math.IndexOfMax(value);
-    }
-    return result;
-  }
-
 
   public Dictionary Find(String key) {
     return math.FindIn(key, this);
   }
-
-  public boolean add(Object o) {
+  /** push a word to dictionary without checking*/
+  public boolean push(Object o) {
     if (o instanceof Word) {
+
       Word x = (Word) o;
       if (size == MAX_SIZE) {
         this.Expand();
@@ -79,9 +79,27 @@ public class Dictionary {
     }
     return false;
   }
-
-  public boolean push(String _target, String _content){
-    return false;
+  /** add a word to dictionary or fix content of a word */
+  public boolean add(Word src){
+    int pos =math.binarySearch(this,0,size-1,src.get_target().toLowerCase());
+    System.out.println(src.get_target().toLowerCase());
+    if (pos!=-1) {
+      System.out.println("the content of word "+src.get_target()+" will be changed into "+src.get_content());
+      list[pos].set_content(src.get_content());
+      return false;
+    } else {
+      System.out.println("the word "+src.get_target()+" will be added to the data");
+      this.push(src);
+      this.sort();
+      return true;
+    }
+  }
+  public void save() throws ParseException, IOException {
+    JSONArray t = new JSONArray();
+    for (int i=0;i<size;i++) {
+      t.add(list[i].toJson());
+    }
+    math.save(t);
   }
 
   public void print() {
