@@ -11,17 +11,9 @@ import java.util.Iterator;
 
 public class math {
     public static final float acceptable =(float) 1;
-    static public int IndexOfMax(float[] in){
 
-        float[] temp=new float[in.length];
-        temp=in.clone();
-        Arrays.sort(temp);
-        float value= temp[temp.length-1];
-        return Arrays.binarySearch(temp,value);
-
-    }
     public static void save(JSONArray t) throws IOException {
-        String path = "C:\\Users\\Nguyen Minh Quang\\Desktop\\OOP\\BT_1\\ENVN_0.json";
+        String path = "data\\ENVN.json";
         FileWriter f = new FileWriter(path);
         t.writeJSONString(f);
         f.flush();
@@ -29,7 +21,7 @@ public class math {
     }
     public static Dictionary LoadJson() throws IOException, ParseException {
         Dictionary result = new Dictionary();
-        String path = "C:\\Users\\Nguyen Minh Quang\\Desktop\\OOP\\BT_1\\ENVN.json";
+        String path = "data\\ENVN.json";
         JSONParser parser= new JSONParser();
         JSONArray obj = (JSONArray) parser.parse(new FileReader(path));
         int Z=0;
