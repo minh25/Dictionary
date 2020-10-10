@@ -16,6 +16,9 @@ public class Dictionary {
 
   public Dictionary() {}
 
+
+
+
   public static void main(String[] args) throws IOException, ParseException {
     Dictionary x;
     x = math.LoadJson();
@@ -23,18 +26,25 @@ public class Dictionary {
     Scanner in = new Scanner(System.in);
     while (true) {
       String key = in.next();
-      if (key.toLowerCase().equals("add")) {
+      if(key.toLowerCase().equals("add")){
         String t = in.next();
         String content = in.nextLine();
-        Word X = new Word(t, content);
+        Word X=new Word(t,content);
         System.out.println(X);
-        System.out.println(math.binarySearch(x, 0, x.getSize() - 1, X.get_target()));
+        System.out.println(math.binarySearch(x,0,x.getSize()-1,X.get_target()));
         x.add(X);
         x.save();
-      } else {
-        x.Find(key).print();
-      }
-    }
+      } else{
+        if(key.toLowerCase().equals("delete")){
+          String t = in.next();
+          Word X=new Word(t);
+          System.out.println(X);
+          System.out.println(math.binarySearch(x,0,x.getSize()-1,X.get_target()));
+          x.delete(X);
+          x.save();
+        } else {
+          x.Find(key).print();}
+      }}
   }
 
   public Word get(final int index) {
@@ -48,9 +58,8 @@ public class Dictionary {
   public boolean isEmpty() {
     return this.size == 0;
   }
-
-  public void sort() {
-    Arrays.sort(list, 0, size - 1);
+  public void sort(){
+    Arrays.sort(list,0,size-1);
   }
 
   private void Expand() {
@@ -60,10 +69,11 @@ public class Dictionary {
     System.arraycopy(x, 0, this.list, 0, x.length);
   }
 
+
   public Dictionary Find(String key) {
     return math.FindIn(key, this);
   }
-  /** push a word to dictionary without checking, just for loading from file */
+  /** push a word to dictionary without checking*/
   public boolean push(Object o) {
     if (o instanceof Word) {
 
@@ -78,37 +88,48 @@ public class Dictionary {
     return false;
   }
   /** delete a word from dictionary */
-  public boolean delete(Word key) {
-    int pos = math.binarySearch(this, 0, size - 1, key.get_target().toLowerCase());
-    if (pos == -1) {
-      return false;
-    }
-    for (int i = pos; i < size - 1; i++) {
-      list[i] = list[i + 1];
-    }
-    size--;
-    return true;
-  }
-  /** add a word to dictionary or fix content of a word */
-  public boolean add(Word src) {
-    int pos = math.binarySearch(this, 0, size - 1, src.get_target().toLowerCase());
-    System.out.println(src.get_target().toLowerCase());
-    if (pos != -1) {
-      System.out.println(
-          "the content of word " + src.get_target() + " will be changed into " + src.get_content());
-      list[pos].set_content(src.get_content());
+  public boolean delete(Word key){
+    int pos = math.binarySearch(this,0,size-1,key.get_target().toLowerCase());
+    if(pos==-1){
+      System.out.println("not found word "+key.get_target());
       return false;
     } else {
-      System.out.println("the word " + src.get_target() + " will be added to the data");
-      this.push(src);
-      this.sort();
+      for(int i=pos;i<size-1;i++){
+        list[i]=list[i+1];
+      }
+      size--;
+      System.out.println("deleted "+ key.get_target());
+      return true;
+
+    }
+  }
+  /** add a word to dictionary or fix content of a word */
+  public boolean add(Word src){
+    int pos =math.binarySearch(this,0,size-1,src.get_target().toLowerCase());
+    System.out.println(src.get_target().toLowerCase());
+    if (pos!=-1) {
+      System.out.println("the content of word "+src.get_target()+" will be changed into "+src.get_content());
+      list[pos].set_content(src.get_content());
+
+      return false;
+    } else {
+      System.out.println("the word "+src.get_target()+" will be added to the data");
+      int i;
+      for(i=0;i<size;i++){
+        if (list[i].compareTo(src)>0) break;
+      }
+      if(size==MAX_SIZE) this.Expand();
+      size++;
+      for(int j=size;j>i;j--){
+        list[j]=list[j-1];
+      }
+      list[i]=src;
       return true;
     }
   }
-
   public void save() throws ParseException, IOException {
     JSONArray t = new JSONArray();
-    for (int i = 0; i < size; i++) {
+    for (int i=0;i<size;i++) {
       t.add(list[i].toJson());
     }
     math.save(t);
