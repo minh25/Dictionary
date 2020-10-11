@@ -3,7 +3,7 @@ import org.json.simple.parser.ParseException;
 
 import java.util.Objects;
 import java.util.Scanner;
-
+/** don't touch :) */
 public class Word implements Comparable<Word> {
 
   String _target, _content;
@@ -69,6 +69,13 @@ public class Word implements Comparable<Word> {
             + "</Q></N></I></F></C>";
   }
 
+  /**
+   * to compare the "like rate" between them. its big value means they are look like each other min
+   * =0 max =1
+   *
+   * @param key
+   * @return a float
+   */
   public float Match(String key) {
     String _t = _target.toLowerCase();
     key = key.toLowerCase();
