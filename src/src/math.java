@@ -1,12 +1,7 @@
 
 import org.json.simple.*;
 import org.json.simple.parser.*;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
+import java.io.*;
 
 
 public class math {
@@ -74,6 +69,7 @@ public class math {
         }
         return result;
     }
+
 
 
 

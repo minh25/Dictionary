@@ -27,8 +27,6 @@ public class GetAudio {
         } else {
             System.out.println("local data");
         }
-
-
     }
 
 
